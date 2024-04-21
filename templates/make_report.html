@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make Report</title>
+</head>
+<body>
+    <h1>Make Report</h1>
+    <form action="/make_report" method="POST">
+        <!-- Add hidden input fields to capture usernames of involved parties -->
+        <input type="hidden" name="reporting_user_username" value="{{ session.username }}">
+        <label for="rated_user_username">Select User to Report:</label>
+        <select name="reported_user_username" id="rated_user_username">
+            {% for user in users %}
+            <option value="{{ user.username }}">{{ user.username }}</option>
+            {% endfor %}
+        </select>
+        <br /><br />
+        <label for="report_details">Report Details:</label><br />
+        <textarea name="report_details" id="report_details" rows="4" cols="50"></textarea>
+        <br /><br />
+        <label for="date">Date:</label>
+        <input type="text" name="date" id="date" value="{{ now.strftime('%d/%m/%Y') }}" readonly>
+        <br /><br />
+        <input type="submit" value="Submit Report">
+    </form>
+</body>
+</html>

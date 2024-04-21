@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask Question</title>
+</head>
+<body>
+    <h1>Ask Question</h1>
+    <form method="post">
+        <input type="hidden" name="user_username" value="{{ session.username }}">
+        <label for="user_type">User Category:</label><br>
+        <select id="user_type" name="user_type" required>
+            <option value="Rider">Rider</option>
+            <option value="Driver">Driver</option>
+            <option value="General">General</option>
+        </select><br><br>
+
+        <label for="question_text">Question:</label><br>
+        <textarea id="question_text" name="question_text" rows="4" cols="50" required></textarea><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

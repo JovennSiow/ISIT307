@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Address</title>
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <h1>Saved Address</h1>
+    <ul>
+        {% for address in user.addresses %}
+            <li>
+                <a href="{{ url_for('edit_address', address_id=address.id) }}">{{ address.name }}: {{ address.address }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <hr>
+    <h2>Add New Address</h2>
+    <form method="POST">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br>
+        <label for="address">Address:</label><br>
+        <input type="text" id="address" name="address" required><br><br>
+        <button type="submit">Add Address</button>
+    </form>
+</body>
+</html>

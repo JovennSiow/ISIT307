@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQs</title>
+</head>
+<body>
+    <h1>FAQs</h1>
+    <ul>
+        {% for faq in faqs %}
+            <li>
+                <strong>{{ faq.question }}</strong><br>
+                {{ faq.answer }}
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('add_faq') }}">Add a new FAQ</a>
+    <br>
+    <a href="{{ url_for('admin_dashboard') }}">Back to Home</a>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQs</title>
+</head>
+<body>
+    <h1>FAQs</h1>
+    <ul>
+        {% for faq in faqs %}
+            <li>
+                <strong>{{ faq.question }}</strong><br>
+                {{ faq.answer }}
+            </li>
+        {% endfor %}
+    </ul>
+    
+    {% if session['role'] == 'Driver' %}
+        <p><a href="{{ url_for('driver_dashboard') }}">Go Back to Dashboard</a></p>
+    {% elif session['role'] == 'Rider' %}
+        <p><a href="{{ url_for('rider_dashboard') }}">Go Back to Dashboard</a></p>
+    {% endif %}
+</body>
+</html>

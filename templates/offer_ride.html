@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offer a Ride</title>
+    <style>
+        #map {
+            height: 300px;
+            width: 70%;
+        }
+    </style>
+</head>
+<body>
+    <h2>Offer a Ride</h2>
+    <div id="map"></div>
+    <div id="address"></div>
+    <div id="successMessage" style="display: none; color: green;">Ride offered successfully!</div> <!-- Success message -->
+
+    <br>
+    <form id="rideForm" action="{{ url_for('offer_ride') }}" method="post">
+        <label for="origin">Origin:</label><br>
+        <input type="text" id="origin" name="origin"><br>
+        <label for="destination">Destination:</label><br>
+        <input type="text" id="destination" name="destination"><br>
+        <label for="date">Date:</label><br>
+        <input type="date" id="date" name="date"><br>
+        <label for="time">Time:</label><br>
+        <input type="time" id="time" name="time"><br>
+        <label for="seats_available">Seats Available:</label><br>
+        <input type="number" id="seats_available" name="seats_available" min="1"><br><br>
+        <input type="submit" value="Offer Ride">
+    </form>
+
+    <script>
+        var map;
+        var geocoder;
+        var directionsService;
+        var directionsRenderer;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 20,
+                center: {lat: 1.3521, lng: 103.8198} // Default center (e.g., Singapore)
+            });
+            geocoder = new google.maps.Geocoder();
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer();
+            directionsRenderer.setMap(map);
+
+            // Get user's geolocation
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    map.setCenter(userLocation); // Set the center of the map to the user's location
+                    var marker = new google.maps.Marker({
+                        position: userLocation,
+                        map: map,
+                        title: 'You are here'
+                    });
+
+                    // Reverse geocoding to get user's address
+                    geocoder.geocode({'location': userLocation}, function(results, status) {
+                        if (status === 'OK') {
+                            if (results[0]) {
+                                var address = results[0].formatted_address;
+                                document.getElementById('address').innerHTML = 'Your real-time location: ' + address;
+                            } else {
+                                console.log('No results found');
+                            }
+                        } else {
+                            console.log('Geocoder failed due to: ' + status);
+                        }
+                    });
+                }, function() {
+                    // Handle geolocation errors
+                    console.log('Error: The Geolocation service failed.');
+                });
+            } else {
+                // Browser doesn't support geolocation
+                console.log('Error: Your browser doesn\'t support geolocation.');
+            }
+
+            // Listen for form submission
+            document.getElementById('rideForm').addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                var origin = document.getElementById('origin').value;
+                var destination = document.getElementById('destination').value;
+
+                // Submit the form data using AJAX
+                fetch("{{ url_for('offer_ride') }}", {
+                    method: 'POST',
+                    body: new FormData(document.getElementById('rideForm'))
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Form submission successful, display success message
+                        document.getElementById('successMessage').style.display = 'block';
+                        
+                        // Calculate and display the route
+                        calculateAndDisplayRoute(origin, destination);
+                    } else {
+                        // Form submission failed
+                        console.error('Form submission failed:', response.statusText);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error submitting form:', error);
+                });
+            });
+        }
+
+        // Function to calculate and display the route
+        function calculateAndDisplayRoute(origin, destination) {
+            directionsService.route({
+                origin: origin,
+                destination: destination,
+                travelMode: 'DRIVING'
+            }, function(response, status) {
+                if (status === 'OK') {
+                    directionsRenderer.setDirections(response);
+                } else {
+                    window.alert('Directions request failed due to ' + status);
+                }
+            });
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDWGspYJlGaBszG-0PYcN41cCCGPpEnZ5s&callback=initMap" async defer></script>
+    <a href="{{ url_for('driver_dashboard') }}" id="dashboardLink">Go to dashboard</a>
+</body>
+</html>

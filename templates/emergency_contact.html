@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Contact</title>
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    
+    <h1>Existing Emergency Contact</h1>
+    <ul>
+        {% for contact in user.emergency_contacts %}
+          <li>
+            <a href="{{ url_for('edit_emergency_contact', contact_id=contact.id) }}">{{ contact.name }} - {{ contact.phone }} </a>
+          </li>
+        {% endfor %}
+      </ul>
+    <hr>
+    <h2>Add Emergency Contact</h2>
+    <form method="post" action="/emergency_contact">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone" name="phone" required>
+        <button type="submit">Add Contact</button>
+    </form>
+</body>
+</html>

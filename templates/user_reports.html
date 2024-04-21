@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Reports</title>
+</head>
+<body>
+    <h1>User Reports</h1>
+    
+    <form method="post">
+        {% for report in user_reports_data %}
+        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 20px;">
+            <h3>Case Number #{{ report.case_number }}</h3>
+            <!-- Display usernames of involved parties -->
+            <p><strong>Involved Parties:</strong> {{ report.reporting_user_username }} (Reporting) and {{ report.reported_user_username }} (Reported)</p>
+            <p><strong>Report Details:</strong> {{ report.report_details }}</p>
+            <p><strong>Date:</strong> {{ report.date }}</p>
+            <p><strong>Status:</strong> 
+                <select name="status_{{ report.case_number }}">
+                    <option value="open" {% if report.status == 'open' %} selected {% endif %}>Open</option>
+                    <option value="closed" {% if report.status == 'closed' %} selected {% endif %}>Closed</option>
+                </select>
+            </p>
+        </div>
+        {% endfor %}
+
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <a href="{{ url_for('admin_dashboard') }}">Back to Home</a>
+
+</body>
+</html>

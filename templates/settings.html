@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Settings</title>
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <h1>Settings</h1>
+    <p>{{ username }}</p>
+    <p><a href="{{ url_for('profile', username=username) }}">View Profile</a></p>
+    
+    {% if session['role'] == 'Driver' %}
+        {% if car %}
+            <p><a href="{{ url_for('view_car', car_id=car.id) }}">View Car Detail</a></p>
+        {% else %}
+            <p>No car details available.</p>
+        {% endif %}
+        <p><a href="{{ url_for('car_detail') }}">Add Car Detail</a></p>
+    {% endif %}
+    
+    {% if session['role'] == 'Driver' %}
+        <p><a href="{{ url_for('driver_dashboard') }}">Go Back to Dashboard</a></p>
+    {% elif session['role'] == 'Rider' %}
+        <p><a href="{{ url_for('rider_dashboard') }}">Go Back to Dashboard</a></p>
+    {% endif %}
+
+    <p><a href="{{ url_for('saved_address', username=username)}}">Saved Address</a></p>
+    <p><a href="{{ url_for('emergency_contact', username=username)}}">Emergency Contact</a></p>
+    <a href="{{ url_for('delete_account') }}" onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.')">Delete Account</a><br><br>
+    <a href="{{ url_for('logout') }}">Logout</a>
+
+</body>
+</html>
