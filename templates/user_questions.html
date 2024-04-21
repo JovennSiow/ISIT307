@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Questions</title>
+</head>
+<body>
+    <h1>User Questions</h1>
+    
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Question ID</th>
+                <th>User</th>
+                <th>Question</th>
+                <th>Reply</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for question in questions %}
+            <tr>
+                <td>{{ question.id }}</td>
+                <td>{{ question.user }}</td>
+                <td>{{ question.question }}</td>
+                <td>{{ question.reply }}</td>
+                <td>
+                    <form action="{{ url_for('reply_to_question', question_id=question.id) }}" method="post">
+                        <textarea name="reply" rows="3" cols="50"></textarea><br>
+                        <input type="submit" value="Submit Reply">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('admin_dashboard') }}">Back to Home</a>
+
+</body>
+</html>

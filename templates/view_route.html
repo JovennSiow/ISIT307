@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Route</title>
+    <style>
+        #map {
+            height: 400px;
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+    <h2>Route Details</h2>
+    <div id="map"></div>
+
+    <script>
+        var map;
+        var directionsService;
+        var directionsRenderer;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 10,
+                center: {lat: 1.3521, lng: 103.8198} // Default center (e.g., Singapore)
+            });
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer();
+            directionsRenderer.setMap(map);
+
+            // Retrieve origin and destination from the server-side template
+            var origin = "{{ origin }}";
+            var destination = "{{ destination }}";
+
+            calculateAndDisplayRoute(origin, destination);
+        }
+
+        function calculateAndDisplayRoute(origin, destination) {
+            directionsService.route({
+                origin: origin,
+                destination: destination,
+                travelMode: 'DRIVING'
+            }, function(response, status) {
+                if (status === 'OK') {
+                    directionsRenderer.setDirections(response);
+                } else {
+                    window.alert('Directions request failed due to ' + status);
+                }
+            });
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDWGspYJlGaBszG-0PYcN41cCCGPpEnZ5s&callback=initMap" async defer></script>
+</body>
+</html>

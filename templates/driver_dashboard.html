@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Driver Dashboard</title>
+  </head>
+  <body>
+    {% if error_message %}
+    <h2>Error: {{ error_message }}</h2>
+    {% else %}
+    <h2>Welcome, {{ username }}</h2>
+    <h3>Offered Rides:</h3>
+    <ul>
+      {% for ride in rides %}
+      <li>
+        Ride ID: {{ ride.id }}<br />
+        Origin: {{ ride.origin }}<br />
+        Destination: {{ ride.destination }}<br />
+        Date: {{ ride.date }}<br />
+        Time: {{ ride.time }}<br />
+        Seats Available: {{ ride.seats_available }}<br />
+        {% for passenger in ride.riders %} Passenger: {{ passenger.username
+        }}<br />
+        {% endfor %}
+      </li>
+      {% endfor %}
+    </ul>
+    <p><a href="{{ url_for('offer_ride') }}">Offer a Ride</a></p>
+    <p><a href="{{ url_for('settings') }}">Settings</a></p>
+    <p><a href="{{ url_for('driver', username=username, gender=gender) }}">Ride Request</a></p>
+    <p><a href="{{ url_for('rate_review') }}">Rate and Review</a></p>
+    <p><a href="{{ url_for('logout') }}">Logout</a></p>
+    {% endif %}
+  </body>
+</html>
